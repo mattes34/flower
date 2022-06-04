@@ -236,13 +236,16 @@ static void zclApp_ReadSensors(void) {
     switch (currentSensorsReadingPhase++) {
     case 0:
         POWER_ON_SENSORS();
+#ifndef SOIL_MOISTURE_ONLY
         zclApp_ReadLumosity();
+#endif
         break;
 
     case 1:
         zclBattery_Report();
         zclApp_ReadSoilHumidity();
         break;
+#ifndef SOIL_MOISTURE_ONLY
     case 2:
         zclApp_InitBME280(&bme_dev);
         break;
@@ -250,6 +253,7 @@ static void zclApp_ReadSensors(void) {
     case 3:
         zclApp_ReadDS18B20();
         break;
+#endif
     default:
         POWER_OFF_SENSORS();
         currentSensorsReadingPhase = 0;
