@@ -244,6 +244,8 @@ static void zclApp_ReadSensors(void) {
     case 1:
         zclBattery_Report();
         zclApp_ReadSoilHumidity();
+        POWER_OFF_SENSORS();
+        currentSensorsReadingPhase = 0;
         break;
 #ifndef SOIL_MOISTURE_ONLY
     case 2:

@@ -23,13 +23,34 @@ extern "C" {
 
 
 
-#define AIR_COMPENSATION_FORMULA(ADC)   ((0.179 * (double)ADC + 3926.0))
+//#define AIR_COMPENSATION_FORMULA(ADC)   ((0.179 * (double)ADC + 3926.0))
+//#define WATER_COMPENSATION_FORMULA(ADC) ((0.146 * (double)ADC + 2020.0))
+
+//#define AIR_COMPENSATION_FORMULA(ADC)   ((0.179 * (double)ADC + 3926.0))
+//#define WATER_COMPENSATION_FORMULA(ADC) ((0.146 * (double)ADC + 2020.0))
+
+  // change offset of AIR to dry soil
+#define AIR_COMPENSATION_FORMULA(ADC)   ((0.179 * (double)ADC + 2550.0))
 #define WATER_COMPENSATION_FORMULA(ADC) ((0.146 * (double)ADC + 2020.0))
+  
+  
+#define REPORT_2HOURS
 
-
-
-#define APP_REPORT_DELAY ((uint32) 1800000) //30 minutes
-
+#ifdef REPORT_0_5HOUR
+   #define APP_REPORT_DELAY ((uint32) 1800000) //30 minutes
+#endif
+#ifdef REPORT_1HOUR
+   #define APP_REPORT_DELAY ((uint32) 3600000) //1 hour
+#endif
+#ifdef REPORT_1_5HOURS
+   #define APP_REPORT_DELAY ((uint32) 5400000) //90 minutes
+#endif
+#ifdef REPORT_2HOURS
+   #define APP_REPORT_DELAY ((uint32) 7200000) //2 hours
+#endif
+#ifdef REPORT_3HOURS
+   #define APP_REPORT_DELAY ((uint32) 7200000) //3 hours
+#endif
 
 /*********************************************************************
  * MACROS
