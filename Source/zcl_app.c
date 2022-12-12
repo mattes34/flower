@@ -46,14 +46,21 @@
 #define HAL_KEY_CODE_RELEASE_KEY HAL_KEY_CODE_NOKEY
 
 // use led4 as output pin, osal will shitch it low when go to PM
+//#define POWER_ON_SENSORS()                                                                                                                 \
+//    do {                                                                                                                                   \
+//        HAL_TURN_ON_LED4();                                                                                                                \
+//        st(T3CTL |= BV(4););                                                                                                               \
+//        IO_PUD_PORT(OCM_CLK_PORT, IO_PUP);                                                                                                 \
+//        IO_PUD_PORT(OCM_DATA_PORT, IO_PUP);                                                                                                \
+//        IO_PUD_PORT(DS18B20_PORT, IO_PUP);                                                                                                 \
+//    } while (0)
+      
 #define POWER_ON_SENSORS()                                                                                                                 \
     do {                                                                                                                                   \
         HAL_TURN_ON_LED4();                                                                                                                \
         st(T3CTL |= BV(4););                                                                                                               \
-        IO_PUD_PORT(OCM_CLK_PORT, IO_PUP);                                                                                                 \
-        IO_PUD_PORT(OCM_DATA_PORT, IO_PUP);                                                                                                \
-        IO_PUD_PORT(DS18B20_PORT, IO_PUP);                                                                                                 \
-    } while (0)
+    } while (0) 
+ 
 #define POWER_OFF_SENSORS()                                                                                                                \
     do {                                                                                                                                   \
         HAL_TURN_OFF_LED4();                                                                                                               \
@@ -236,23 +243,17 @@ static void zclApp_ReadSensors(void) {
     switch (currentSensorsReadingPhase++) {
     case 0:
         POWER_ON_SENSORS();
-#ifndef SOIL_MOISTURE_ONLY
-        zclApp_ReadLumosity();
-#endif
-        break;
-
-    case 1:
         zclBattery_Report();
         zclApp_ReadSoilHumidity();
         POWER_OFF_SENSORS();
         currentSensorsReadingPhase = 0;
         break;
 #ifndef SOIL_MOISTURE_ONLY
-    case 2:
+    case 1:
         zclApp_InitBME280(&bme_dev);
         break;
 
-    case 3:
+    case 2:
         zclApp_ReadDS18B20();
         break;
 #endif
